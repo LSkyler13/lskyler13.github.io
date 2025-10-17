@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyler Luangvitham | Portfolio</title>
+    <style>
+        :root {
+            --bg-color: #0f172a; /* Slate 900 */
+            --card-color: #1e293b; /* Slate 800 */
+            --primary-color: #38bdf8; /* Sky 400 */
+            --text-color: #e2e8f0; /* Slate 200 */
+            --text-muted: #94a3b8; /* Slate 400 */
+            --border-color: #334155; /* Slate 700 */
+            --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Similar to Neue Haas Grotesk */
+        }
+
+        /* --- Basic Setup --- */
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px; /* Offset for sticky nav */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        /* --- Sticky Navigation Bar --- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 0;
+            z-index: 1000;
+            background-color: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* For Safari */
+            transition: top 0.3s;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .nav-links ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav .nav-links ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        nav .nav-links ul li a:hover,
+        nav .nav-links ul li a.active {
+            color: white;
+            background-color: var(--border-color);
+        }
+
+        .nav-socials a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1.3rem;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
+
+        .nav-socials a:hover {
+            color: var(--primary-color);
+        }
+
+
+        /* --- Full Screen Home Section --- */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+            background: linear-gradient(150deg, #0f172a 15%, #1e293b 70%, #334155 94%);
+            overflow: hidden;
+        }
+
+        .home-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Landing page animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #home h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            color: white;
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .fade-in-delayed {
+            opacity: 0; /* Start hidden */
+            animation: fadeInUp 1s ease-out 1.5s forwards; /* 1.5s delay */
+        }
+        
+        #home .subtitle { font-size: 1.25rem; color: var(--primary-color); margin-bottom: 20px; }
+        #home p { max-width: 600px; margin: 0 auto 30px auto; color: var(--text-muted); font-size: 1.1rem; }
+
+        /* --- Wave Background --- */
+        .waves { position: absolute; bottom: 0; left: 0; width: 100%; height: 15vh; min-height: 100px; max-height: 250px; }
+        .parallax > use { animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite; }
+        .parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; fill: rgba(30, 41, 59, 0.7); }
+        .parallax > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; fill: rgba(51, 65, 85, 0.5); }
+        .parallax > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; fill: rgba(71, 85, 105, 0.3); }
+        .parallax > use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; fill: var(--card-color); }
+
+        @keyframes move-forever {
+            0% { transform: translate3d(-90px,0,0); }
+            100% { transform: translate3d(85px,0,0); }
+        }
+
+        /* --- General Layout & Sections --- */
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 100px 0; border-bottom: 1px solid var(--border-color); }
+        section:last-child { border-bottom: none; }
+        h2 { font-size: 2.5rem; margin-bottom: 40px; text-align: center; color: white; }
+        
+        /* --- Fade-in Animation on Scroll --- */
+        .fade-in-section { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* --- Projects --- */
+        .project-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+        .project-card { background: var(--card-color); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; }
+        .project-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .project-image { background-color: #000; height: 220px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
+        .project-content { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+        .project-title { font-size: 1.5rem; margin-bottom: 10px; color: white; }
+        .project-description { color: var(--text-muted); flex-grow: 1; margin-bottom: 20px; }
+        .project-tags { margin-bottom: 20px; }
+        .tag { display: inline-block; background: var(--border-color); color: var(--text-color); padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; margin: 4px; }
+        .project-links a { color: var(--primary-color); text-decoration: none; font-weight: 600; margin-right: 20px; transition: color 0.3s; }
+        .project-links a:hover { text-decoration: underline; }
+
+        /* --- About Me (Skills & Experience) --- */
+        #about .subsection { margin-bottom: 60px; }
+        #about h3 { font-size: 1.8rem; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 2px solid var(--border-color); color: white; }
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .skill-category, .job { background: var(--card-color); padding: 25px; border-left: 3px solid var(--primary-color); border-radius: 0 8px 8px 0; }
+        .skill-category h4, .job h4 { margin-top: 0; margin-bottom: 15px; font-size: 1.2rem; color: white; }
+        .skill-category ul { list-style: none; padding: 0; margin: 0; color: var(--text-muted); }
+        .job-title { font-size: 1.1rem; font-weight: 600; color: var(--text-color); }
+        .job-company, .job-date { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
+        .job ul { padding-left: 20px; color: var(--text-muted); }
+        
+        /* --- Contact --- */
+        .contact-form { max-width: 600px; margin: 0 auto; text-align: center; }
+        .contact-form p { color: var(--text-muted); margin-bottom: 30px; }
+        .btn { background: var(--primary-color); color: var(--bg-color); padding: 12px 25px; border: none; border-radius: 5px; text-decoration: none; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background-color 0.3s; }
+        .btn:hover { background: #7dd3fc; }
+        
+        /* --- Footer --- */
+        footer { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            #home h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            nav .container { padding: 0 15px; }
+            nav .nav-links { display: none; } /* Hide main links on mobile, or implement a hamburger menu */
+            .nav-socials a { font-size: 1.2rem; margin-left: 15px; }
+        }
+
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-links">
+                <ul>
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#about">About Me</a></li>
+                </ul>
+            </div>
+            <div class="nav-socials">
+                <a href="mailto:spluangvi@gmail.com" target="_blank" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                <a href="https://www.linkedin.com/in/skyler-luangvitham" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/lskyler13" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </nav>
+    
+    <header id="home">
+        <div class="home-content">
+            <h1>Skyler Luangvitham</h1>
+            <div class="fade-in-delayed">
+                <p class="subtitle">Information Systems Student | Aspiring Security & DevOps Engineer</p>
+                <p>A proactive and results-oriented Business Information Systems student at VCU with hands-on internship experience in IT operations, information security, and process automation at both university and enterprise levels.</p>
+            </div>
+        </div>
+        <!-- Wave SVG -->
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
+            <g class="parallax">
+                <use xlink:href="#gentle-wave" x="48" y="0" /><use xlink:href="#gentle-wave" x="48" y="3" /><use xlink:href="#gentle-wave" x="48" y="5" /><use xlink:href="#gentle-wave" x="48" y="7" />
+            </g>
+        </svg>
+    </header>
+
+    <main>
+        <section id="projects" class="container fade-in-section">
+            <h2>Projects</h2>
+            <div class="project-grid">
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <div class="project-image"><span>Printer Dashboard UI</span></div>
+                    <div class="project-content">
+                        <h3 class="project-title">Campus Printer Monitor Web App</h3>
+                        <p class="project-description">Developed an in-house web application to monitor 15+ campus printers, enabling proactive maintenance and automating support ticket creation. The solution cut manual weekly checks by 87% (from 4.5 hours to 30 minutes).</p>
+                        <div class="project-tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">BeautifulSoup</span><span class="tag">REST API</span><span class="tag">Automation</span></div>
+                        <div class="project-links"><a href="https://github.com/lskyler13" target="_blank">View Code</a><a href="#" target="_blank">Live Demo</a></div>
+                    </div>
+                </div>
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <div class="project-image"><span>Lotus VCU Website</span></div>
+                    <div class="project-content">
+                        <h3 class="project-title">VCU "The Lotus" Organization Website</h3>
+                        <p class="project-description">Designed and developed a responsive informational website for a VCU student organization, serving as a central hub for new members to learn about the mission, events, and leadership.</p>
+                        <div class="project-tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">UI/UX Design</span><span class="tag">GitHub Pages</span></div>
+                        <div class="project-links"><a href="https://github.com/lskyler13/lotus-site" target="_blank">View Code</a><a href="https://lskyler13.github.io/lotus-site/" target="_blank">Visit Site</a></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="container fade-in-section">
+            <h2>About Me</h2>
+            <div id="skills" class="subsection">
+                <h3>Skills & Certifications</h3>
+                <div class="grid-layout">
+                    <div class="skill-category">
+                        <h4>Languages</h4>
+                        <ul><li>Python</li><li>JavaScript/TypeScript</li><li>HTML/CSS</li><li>SQL & KQL</li><li>Bash & PowerShell</li></ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>Technologies & Platforms</h4>
+                        <ul><li>Microsoft Azure (Logic Apps, Sentinel)</li><li>AWS</li><li>Git, GitHub, BitBucket</li><li>Jira, ServiceNow, Ivanti Cloud</li><li>IBM QRadar</li></ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>Certifications</h4>
+                        <ul><li>CompTIA Security+</li></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="experience" class="subsection">
+                <h3>Experience</h3>
+                <div class="grid-layout">
+                    <div class="job">
+                        <h4>Information Security Intern</h4>
+                        <p class="job-company">Sumitomo Mitsui Banking Corporation (SMBC)</p>
+                        <p class="job-date">June 2025 - August 2025</p>
+                        <ul><li>Automated tracking of 1,900+ application secret expirations using Azure Logic Apps.</li><li>Built an internal monitoring tool to detect outages across in-house SOC web apps.</li><li>Investigated and documented 20+ security alerts to strengthen incident response.</li><li>Tuned Microsoft Sentinel detection rules weekly to reduce false positives.</li></ul>
+                    </div>
+                    <div class="job">
+                        <h4>Information Technology Intern</h4>
+                        <p class="job-company">VCU Technology Services</p>
+                        <p class="job-date">June 2024 - Present</p>
+                        <ul><li>Built the printer-monitor web app that cut weekly checks by 87%.</li><li>Automated Ivanti Cloud ticket creation from printer error detection.</li><li>Deployed and secured the application and created full documentation.</li><li>Delivered IT support to 12 departments.</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="container fade-in-section">
+            <h2>Get In Touch</h2>
+            <div class="contact-form">
+                <p>I'm currently seeking new opportunities and connections. Feel free to reach out via email or connect with me on LinkedIn.</p>
+                <a href="mailto:spluangvi@gmail.com" class="btn">Say Hello</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Skyler Luangvitham. Designed with care.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in-section').forEach(section => {
+                observer.observe(section);
+            });
+
+            const navLinks = document.querySelectorAll('nav .nav-links ul li a');
+            const allSections = document.querySelectorAll('header, section');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                allSections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 90) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                // Special case for 'about' which contains skills and experience
+                const aboutSection = document.getElementById('about');
+                if(aboutSection.classList.contains('is-visible') && pageYOffset < document.getElementById('contact').offsetTop - 90) {
+                    const projectsSection = document.getElementById('projects');
+                    if(pageYOffset > projectsSection.offsetTop) {
+                        current = 'about';
+                    }
+                }
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
