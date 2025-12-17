@@ -2,14 +2,19 @@
     /* Deep Ocean Palette */
     --bg-color: #020617;        
     
-    /* Glassy Navy (Low opacity to let background show through) */
+    /* Glassy Navy */
     --card-color: rgba(0, 5, 30, 0.4); 
     
     --primary-color: #00e0ff;   /* Electric Cyan */
     --text-color: #f1f5f9;      
-    --text-muted: #cbd5e1;      /* Lightened slightly for better readability on glass */
-    --border-color: rgba(56, 189, 248, 0.3); /* Slightly stronger border for definition */
+    --text-muted: #cbd5e1;      
+    --border-color: rgba(56, 189, 248, 0.3); 
     --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* --- CRITICAL FIX: Handle Padding Correctly --- */
+* {
+    box-sizing: border-box;
 }
 
 /* --- Basic Setup --- */
@@ -34,7 +39,6 @@ body {
     width: 100%;
     height: 100vh;
     z-index: -1;
-    /* THE DEEP OCEAN GRADIENT */
     background: radial-gradient(circle at 50% -20%, #004e92 0%, #000428 100%);
     overflow: hidden;
 }
@@ -53,9 +57,8 @@ nav {
     width: 100%;
     padding: 15px 0;
     z-index: 1000;
-    /* Uses the new subtle glass variable */
     background-color: var(--card-color); 
-    backdrop-filter: blur(15px); /* Increased blur for better text readability */
+    backdrop-filter: blur(15px); 
     -webkit-backdrop-filter: blur(15px);
     transition: top 0.3s;
     border-bottom: 1px solid var(--border-color);
@@ -151,6 +154,14 @@ nav .nav-links ul li a.active {
 
 /* --- General Layout & Sections --- */
 .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+/* NEW: Make Projects section wider than the standard container 
+   to give the carousel more breathing room.
+*/
+#projects.container {
+    max-width: 1250px;
+}
+
 section { padding: 100px 0; border-bottom: 1px solid var(--border-color); }
 section:last-child { border-bottom: none; }
 h2 { font-size: 2.5rem; margin-bottom: 40px; text-align: center; color: #ffffff; }
@@ -159,10 +170,43 @@ h2 { font-size: 2.5rem; margin-bottom: 40px; text-align: center; color: #ffffff;
 .fade-in-section { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
 .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
 
-/* --- Projects --- */
-.project-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+/* --- Projects Carousel Styles --- */
+.carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.carousel-container {
+    display: flex;
+    gap: 40px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    padding: 20px 5px;
+    
+    /* Ensure container fits properly between buttons */
+    flex: 1; 
+    width: 0; 
+    min-width: 0; 
+    
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.carousel-container::-webkit-scrollbar {
+    display: none;
+}
 
 .project-card { 
+    /* Force card to be 100% of the available carousel space */
+    flex: 0 0 100%;
+    width: 100%;
+    scroll-snap-align: center;
+    
     background: var(--card-color); 
     border: 1px solid var(--border-color); 
     border-radius: 8px; 
@@ -170,7 +214,7 @@ h2 { font-size: 2.5rem; margin-bottom: 40px; text-align: center; color: #ffffff;
     display: flex; 
     flex-direction: column; 
     transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; 
-    backdrop-filter: blur(8px); /* Blur behind the card */
+    backdrop-filter: blur(8px);
 }
 
 .project-card:hover { 
@@ -210,7 +254,7 @@ h2 { font-size: 2.5rem; margin-bottom: 40px; text-align: center; color: #ffffff;
 
 .tag { 
     display: inline-block; 
-    background: rgba(0, 224, 255, 0.05); /* Even more subtle tag bg */
+    background: rgba(0, 224, 255, 0.05);
     border: 1px solid var(--border-color); 
     color: var(--primary-color); 
     padding: 5px 10px; 
@@ -222,18 +266,42 @@ h2 { font-size: 2.5rem; margin-bottom: 40px; text-align: center; color: #ffffff;
 .project-links a { color: var(--primary-color); text-decoration: none; font-weight: 600; margin-right: 20px; transition: all 0.3s; }
 .project-links a:hover { text-shadow: 0 0 8px var(--primary-color); }
 
+/* Navigation Buttons */
+.carousel-btn {
+    background: rgba(0, 224, 255, 0.1);
+    border: 1px solid var(--border-color);
+    color: var(--primary-color);
+    width: 50px; /* Slightly larger buttons */
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.carousel-btn:hover {
+    background: var(--primary-color);
+    color: #000;
+    box-shadow: 0 0 15px rgba(0, 224, 255, 0.5);
+}
+
 /* --- About Me Layouts --- */
 #about .subsection { margin-bottom: 60px; }
 #about h3 { font-size: 1.8rem; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 2px solid var(--border-color); color: #fff; }
 
-/* SKILLS GRID - 2x2 Layout */
+/* SKILLS GRID */
 .grid-layout { 
     display: grid; 
     grid-template-columns: 1fr 1fr; 
     gap: 40px; 
 }
 
-/* Experience List - Stack */
+/* Experience List */
 .experience-list { display: flex; flex-direction: column; gap: 30px; }
 
 /* --- Job Card Styling --- */
@@ -311,7 +379,7 @@ h2 { font-size: 2.5rem; margin-bottom: 40px; text-align: center; color: #ffffff;
 .skill-tags { display: flex; flex-wrap: wrap; gap: 10px; }
 
 .skill-tag {
-    background: rgba(15, 23, 42, 0.6); /* Slightly more opaque for legibility */
+    background: rgba(15, 23, 42, 0.6); 
     border: 1px solid var(--border-color);
     color: var(--text-muted);
     padding: 8px 14px;
@@ -353,7 +421,6 @@ h2 { font-size: 2.5rem; margin-bottom: 40px; text-align: center; color: #ffffff;
 }
 
 /* --- Footer --- */
-/* REMOVED THE TOP BORDER HERE */
 footer { text-align: center; padding: 40px 20px; color: var(--text-muted); }
 
 /* Responsive */
@@ -363,55 +430,14 @@ footer { text-align: center; padding: 40px 20px; color: var(--text-muted); }
     nav .container { padding: 0 15px; }
     nav .nav-links { display: none; }
     .nav-socials a { font-size: 1.2rem; margin-left: 15px; }
+    
+    /* On mobile, reset max-width to allow normal flow */
+    #projects.container { max-width: 100%; }
+    
     .grid-layout { grid-template-columns: 1fr; }
     .job { flex-direction: column; }
     .job-logo { width: 70px; height: 70px; margin-bottom: 15px; }
-}
-
-/* --- Resume Page Specifics --- */
-.resume-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 20px;
-}
-
-.resume-header h2 {
-    margin: 0;
-    text-align: left;
-    font-size: 2.5rem;
-    color: #fff;
-}
-
-.download-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
-    padding: 10px 20px;
-}
-
-.pdf-container {
-    width: 100%;
-    height: 100vh; 
-    max-height: 1100px;
-    background: var(--card-color);
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-}
-
-.pdf-container iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: block;
-}
-
-@media (max-width: 600px) {
-    .resume-header { flex-direction: column; gap: 20px; text-align: center; }
-    .resume-header h2 { text-align: center; }
-    .pdf-container { height: 80vh; }
+    
+    .carousel-wrapper { gap: 10px; }
+    .carousel-btn { width: 35px; height: 35px; font-size: 1rem; }
 }

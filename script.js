@@ -35,8 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     baseY: height - (j * spacing * 0.6) + 100,
                     
                     // --- DIAGONAL OFFSET LOGIC ---
-                    // By adding 'i' (x-axis) and 'j' (y-axis) together, we create a diagonal gradient.
-                    // When the wave moves, it will follow this gradient from Bottom-Left to Top-Right.
                     offset: i * 0.25 + j * 0.35, 
                     
                     row: j,
@@ -56,32 +54,15 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < particles.length; i++) {
             const p = particles[i];
             
-            // --- DIRECTION CHANGE ---
-            // Using (p.offset - time) instead of (time + p.offset)
-            // This makes the wave travel in the direction of increasing offset (Top-Right)
-            
-            // Primary Wave
             const wave1 = Math.sin(p.offset - time) * waveHeight;
-            
-            // Secondary Wave (Faster & Irregular)
             const wave2 = Math.sin(p.offset * 2.0 - time * 1.5) * (waveHeight * 0.4);
-            
-            // Combine them
             const waveY = wave1 + wave2;
-            
-            // Apply new position
             const currentY = p.baseY + waveY;
             
-            // Drawing the Dot
             ctx.beginPath();
-            
-            // --- DEEP OCEAN BUBBLE STYLE ---
-            // Opacity fades as particles go higher up the screen
             const alpha = Math.max(0, 0.4 - (p.row * 0.02)); 
-            // Size is slightly larger to resemble floating bubbles
             const size = Math.max(0.5, 3.0 - (p.row * 0.1)); 
             
-            // Glowing Electric Cyan color
             ctx.fillStyle = `rgba(200, 240, 255, ${alpha})`; 
             ctx.arc(p.x, currentY, size, 0, Math.PI * 2);
             ctx.fill();
@@ -142,4 +123,23 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // --- CAROUSEL LOGIC ---
+    const carouselContainer = document.querySelector('.carousel-container');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+
+    if (carouselContainer && prevBtn && nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            const cardWidth = carouselContainer.querySelector('.project-card').offsetWidth;
+            // Scroll right by one card width + gap
+            carouselContainer.scrollBy({ left: cardWidth + 40, behavior: 'smooth' });
+        });
+
+        prevBtn.addEventListener('click', () => {
+            const cardWidth = carouselContainer.querySelector('.project-card').offsetWidth;
+            // Scroll left by one card width + gap
+            carouselContainer.scrollBy({ left: -(cardWidth + 40), behavior: 'smooth' });
+        });
+    }
 });
